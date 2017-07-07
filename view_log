@@ -1,0 +1,323 @@
+ViewGroup的相关方法有dispatchTouchEvent、onInterceptTouchEvent、onTouchEvent、requestDisallowInterceptTouchEvent
+View的相关方法有dispatchTouchEvent、onTouchEvent
+点击MyView
+06-28 11:33:32.947 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:33:32.948 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:33:32.948 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 11:33:32.948 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 11:33:32.948 24137-24137/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 11:33:32.948 24137-24137/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent
+06-28 11:33:32.949 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+06-28 11:33:32.949 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+触摸事件到达MyView后没有被消耗，又向上传递
+
+点击ViewGroupB
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+06-28 11:33:48.721 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+ViewGroupB拦截了触摸事件，但没有消耗事件，又向上传递
+
+点击ViewGroupA
+06-28 11:35:04.516 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:35:04.517 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:35:04.517 24137-24137/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+ViewGroupA直接拦截了触摸事件
+
+点击MyView，MyView消耗事件
+06-28 11:49:05.194 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:49:05.194 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:49:05.194 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 11:49:05.195 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 11:49:05.195 13115-13115/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 11:49:05.195 13115-13115/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+06-28 11:49:05.327 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:49:05.327 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:49:05.328 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 11:49:05.328 13115-13115/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 11:49:05.328 13115-13115/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 11:49:05.328 13115-13115/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：1
+
+MyView消耗触摸事件后，事件不再向上传递，之后该事件的所有动作都传到MyView这里，其中可能包含多次的move（示例中没有这种情况）。
+
+点击MyView，ViewGroupB拦截
+06-28 11:48:15.129 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 11:48:15.129 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 11:48:15.129 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 11:48:15.129 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 11:48:15.130 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+06-28 11:48:15.130 12066-12066/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+这和直接点击ViewGroupB的输出一样
+
+现在为ViewGroupB和MyView设置OnTouchListener和OnClickListener，并添加打印日志。
+点击MyView，MyView在onTouchEvent消耗事件
+06-28 16:28:24.140 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:28:24.140 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:28:24.140 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:28:24.141 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 16:28:24.141 6251-6251/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 16:28:24.141 6251-6251/com.sbingo.viewsample I/Sbingo MyView: onTouch
+06-28 16:28:24.141 6251-6251/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 16:28:24.238 6251-6251/com.sbingo.viewsample I/Sbingo MyView: onTouch
+06-28 16:28:24.239 6251-6251/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：1
+
+点击MyView，MyView不消耗事件
+06-28 16:39:52.048 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo MyView: onTouch
+06-28 16:39:52.049 17495-17495/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+06-28 16:39:52.136 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo MyView: onTouch
+06-28 16:39:52.137 17495-17495/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：1
+06-28 16:39:52.162 17495-17495/com.sbingo.viewsample I/Sbingo MyView: onClick
+
+可以发现
+1.onTouch方法先于onTouchEvent方法执行
+2.当MyView不消耗触摸事件时，onClick方法才得到执行，否则不会进入onClick方法。
+3.不管MyView是否消耗事件，事件都没有向上传递
+
+点击MyView，MyView的onTouch方法消耗事件
+07-07 11:08:42.158 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 11:08:42.158 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 11:08:42.158 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 11:08:42.158 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 11:08:42.159 21627-21627/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 11:08:42.159 21627-21627/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 11:08:42.255 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 11:08:42.255 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 11:08:42.255 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 11:08:42.255 21627-21627/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 11:08:42.256 21627-21627/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 11:08:42.256 21627-21627/com.sbingo.viewsample I/Sbingo MyView: onTouch
+
+刚才已经发现onTouch方法先于onTouchEvent方法执行，现在onTouch方法消耗事件后，onTouchEvent方法便不会执行，
+之后该事件的所有动作都传到MyView的onTouch方法。
+
+点击MyView，ViewGroupB拦截
+06-28 16:44:51.593 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:44:51.594 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:44:51.594 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:44:51.594 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+06-28 16:44:51.594 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+06-28 16:44:51.594 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+06-28 16:44:51.691 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+06-28 16:44:51.691 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+06-28 16:44:51.692 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+06-28 16:44:51.692 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+06-28 16:44:51.692 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+06-28 16:44:51.698 20418-20418/com.sbingo.viewsample I/Sbingo ViewGroupB: onClick
+
+当ViewGroupB拦截事件后，之后对于该事件的所有动作ViewGroupB的dispatchTouchEvent方法将返回true,
+ViewGroupB的onInterceptTouchEvent方法将不再执行。
+
+去除MyView的OnClickListener,点击MyView，MyView不消耗事件
+07-07 11:29:06.078 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 11:29:06.078 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 11:29:06.078 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 11:29:06.078 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 11:29:06.079 7138-7138/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 11:29:06.079 7138-7138/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 11:29:06.079 7138-7138/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+07-07 11:29:06.079 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+07-07 11:29:06.079 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+07-07 11:29:06.125 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 11:29:06.126 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 11:29:06.126 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 11:29:06.126 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+07-07 11:29:06.126 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+07-07 11:29:06.144 7138-7138/com.sbingo.viewsample I/Sbingo ViewGroupB: onClick
+
+接着去除ViewGroupB的OnClickListener,点击MyView，MyView不消耗事件
+07-07 11:42:36.186 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 11:42:36.186 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+07-07 11:42:36.187 17561-17561/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+可以发现
+1. 当没有OnClickListener时，触摸事件就会向上传递，否则即使不消耗事件也不会
+2. 向上传递时其实也是先到onTouch再到onTouchEvent方法
+
+反拦截
+app启动时调用ViewGroupB的requestDisallowInterceptTouchEvent方法，点击MyView，ViewGroupB拦截
+07-07 13:22:20.082 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupB: requestDisallowInterceptTouchEvent
+07-07 13:22:20.082 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupA: requestDisallowInterceptTouchEvent
+07-07 13:22:41.056 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 13:22:41.056 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 13:22:41.057 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 13:22:41.057 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 13:22:41.057 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouch
+07-07 13:22:41.057 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupB: onTouchEvent
+07-07 13:22:41.057 12098-12098/com.sbingo.viewsample I/Sbingo ViewGroupA: onTouchEvent
+
+当调用ViewGroupB的requestDisallowInterceptTouchEvent(true)方法时，
+会自动向上调用ViewGroupA的requestDisallowInterceptTouchEvent方法，
+之后在ViewGroupA的onInterceptTouchEvent方法中返回了true进行拦截，拦截成功了。
+可见此时requestDisallowInterceptTouchEvent(true)并没有起作用。
+这次因为
+1.每次点击时，都会重置。所以我们在启动时的设置没有作用。
+2.ACTION_DOWN不能被拦截，否则后续事件都不会向下传递。
+
+ViewGroupB只在ACTION_DOWN时才不拦截，其余情况拦截,点击MyView
+07-07 13:36:44.715 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupB: requestDisallowInterceptTouchEvent
+07-07 13:36:44.715 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupA: requestDisallowInterceptTouchEvent
+07-07 13:36:49.350 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 13:36:49.350 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 13:36:49.350 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 13:36:49.351 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 13:36:49.352 25397-25397/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 13:36:49.352 25397-25397/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 13:36:49.352 25397-25397/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+07-07 13:36:49.435 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 13:36:49.435 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 13:36:49.435 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 13:36:49.436 25397-25397/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 13:36:49.436 25397-25397/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 13:36:49.436 25397-25397/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 13:36:49.436 25397-25397/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：3
+
+MyView只收到了ACTION_DOWN和ACTION_CANCEL两个动作。
+
+ViewGroupB只在ACTION_DOWN时才不拦截，其余情况拦截,
+ @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        myLogger.log(Level.INFO, "dispatchTouchEvent");
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+            default:
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+点击MyView，MyView消耗事件
+07-07 14:13:50.178 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupA: onInterceptTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupB: onInterceptTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupB: requestDisallowInterceptTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupA: requestDisallowInterceptTouchEvent
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 14:13:50.179 26911-26911/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：0
+07-07 14:13:50.251 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupA: dispatchTouchEvent
+07-07 14:13:50.251 26911-26911/com.sbingo.viewsample I/Sbingo ViewGroupB: dispatchTouchEvent
+07-07 14:13:50.251 26911-26911/com.sbingo.viewsample I/Sbingo MyView: dispatchTouchEvent
+07-07 14:13:50.251 26911-26911/com.sbingo.viewsample I/Sbingo MyView: onTouch
+07-07 14:13:50.251 26911-26911/com.sbingo.viewsample I/Sbingo MyView: onTouchEvent：1
+
+调用getParent().requestDisallowInterceptTouchEvent(true)后，
+之后对于该事件的所有动作ViewGroupA和ViewGroupB的onInterceptTouchEvent都没有执行，
+直接执行了子View的dispatchTouchEvent方法， 反拦截成功。
+
+源码分析：
+ @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+    	......
+
+    	final int action = ev.getAction();
+            final int actionMasked = action & MotionEvent.ACTION_MASK;
+
+            // Handle an initial down.
+            if (actionMasked == MotionEvent.ACTION_DOWN) {
+                // Throw away all previous state when starting a new touch gesture.
+                // The framework may have dropped the up or cancel event for the previous gesture
+                // due to an app switch, ANR, or some other state change.
+                cancelAndClearTouchTargets(ev);
+                resetTouchState();
+            }
+
+            // Check for interception.
+            final boolean intercepted;
+            if (actionMasked == MotionEvent.ACTION_DOWN
+                    || mFirstTouchTarget != null) {
+                final boolean disallowIntercept = (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
+                if (!disallowIntercept) {
+                    intercepted = onInterceptTouchEvent(ev);
+                    ev.setAction(action); // restore action in case it was changed
+                } else {
+                    intercepted = false;
+                }
+            } else {
+                // There are no touch targets and this action is not an initial down
+                // so this view group continues to intercept touches.
+                intercepted = true;
+            }
+
+    	......
+
+    }
+
+        /**
+     * Resets all touch state in preparation for a new cycle.
+     */
+    private void resetTouchState() {
+        clearTouchTargets();
+        resetCancelNextUpFlag(this);
+        mGroupFlags &= ~FLAG_DISALLOW_INTERCEPT;
+        mNestedScrollAxes = SCROLL_AXIS_NONE;
+    }
+
+    @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        if (disallowIntercept == ((mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0)) {
+            // We're already in this state, assume our ancestors are too
+            return;
+        }
+
+        if (disallowIntercept) {
+            mGroupFlags |= FLAG_DISALLOW_INTERCEPT;
+        } else {
+            mGroupFlags &= ~FLAG_DISALLOW_INTERCEPT;
+        }
+
+        // Pass it up to our parent
+        if (mParent != null) {
+            mParent.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (ev.isFromSource(InputDevice.SOURCE_MOUSE)
+                && ev.getAction() == MotionEvent.ACTION_DOWN
+                && ev.isButtonPressed(MotionEvent.BUTTON_PRIMARY)
+                && isOnScrollbarThumb(ev.getX(), ev.getY())) {
+            return true;
+        }
+        return false;
+    }
+
+    
+总结：
+流程图
+1. ViewGroup比View多了两个拦截相关的方法。
+2. 有很多方法可以获取触摸事件，可以根据业务场景在合适的地方获取并实现业务逻辑。
+3. 父布局拦截可以一直拦截，也可以根据业务边界动态改变。
+4. 子View阻止拦截也可以分为静态和动态实现。
+5. 核心要点就是熟悉整个流程，在合适的时机和View层次实现业务逻辑。
+

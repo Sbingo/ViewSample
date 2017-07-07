@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sbingo.viewsample.MainActivity">
+
+
+    <com.sbingo.viewsample.ViewGroupA
+        android:id="@+id/vga"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+        <com.sbingo.viewsample.ViewGroupB
+            android:id="@+id/vgb"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <com.sbingo.viewsample.MyView
+                android:id="@+id/my_view"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:background="@color/colorAccent" />
+        </com.sbingo.viewsample.ViewGroupB>
+
+    </com.sbingo.viewsample.ViewGroupA>
+
+
+</LinearLayout>
