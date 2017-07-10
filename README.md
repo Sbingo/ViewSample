@@ -1,5 +1,6 @@
 # ViewSample
-Android View触摸事件分析
+
+![](https://github.com/Sbingo/ViewSample/raw/master/view.png)  
 
 技术分析请见博客：
 
